@@ -1,7 +1,7 @@
 version: 2.2.0
 
 client:
-  organization: Org44
+  organization: Org4
   logging:
     level: info
   cryptoconfig:
@@ -22,7 +22,7 @@ channels:
     orderers:
       - orderer.example.com
     peers:
-      peer0.org44.example.com:
+      peer0.org4.example.com:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
@@ -38,17 +38,17 @@ channels:
           backoffFactor: 2.0
 
 organizations:
-  Org44:
+  Org4:
     users:
       User1:
         key:
-          path: ./crypto/peerOrganizations/org44.example.com/users/User1@org44.example.com/msp/keystore/key.pem
+          path: ./crypto/peerOrganizations/org4.example.com/users/User1@org4.example.com/msp/keystore/key.pem
         cert:
-          path: ./crypto/peerOrganizations/org44.example.com/users/User1@org44.example.com/msp/signcerts/cert.pem
-    mspid: Org44MSP
-    cryptoPath: ./crypto/peerOrganizations/org44.example.com/users/User1@org44.example.com/msp
+          path: ./crypto/peerOrganizations/org4.example.com/users/User1@org4.example.com/msp/signcerts/cert.pem
+    mspid: Org4MSP
+    cryptoPath: ./crypto/peerOrganizations/org4.example.com/users/User1@org4.example.com/msp
     peers:
-      - peer0.org44.example.com
+      - peer0.org4.example.com
   ordererorg:
     mspID: OrdererMSP
     cryptoPath: ./crypto/ordererOrganizations/example.com/users/Admin@example.com/msp
@@ -67,24 +67,24 @@ orderers:
       path: ./crypto/ordererOrganizations/example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
 peers:
-  peer0.org44.example.com:
+  peer0.org4.example.com:
     url: grpcs://192.168.1.81:11051
     grpcOptions:
-      ssl-target-name-override: peer0.org44.example.com
+      ssl-target-name-override: peer0.org4.example.com
       keep-alive-time: 0s
       keep-alive-timeout: 20s
       keep-alive-permit: false
       fail-fast: false
       allow-insecure: false
     tlsCACerts:
-      path: ./crypto/peerOrganizations/org44.example.com/tlsca/tlsca.org44.example.com-cert.pem
+      path: ./crypto/peerOrganizations/org4.example.com/tlsca/tlsca.org4.example.com-cert.pem
 
 entitymatchers:
   peer:
-    - pattern: (\w*)peer0.org44.example.com(\w*)
+    - pattern: (\w*)peer0.org4.example.com(\w*)
       urlsubstitutionexp: grpcs://192.168.1.81:11051
-      ssltargetoverrideurlsubstitutionexp: peer0.org44.example.com
-      mappedhost: peer0.org44.example.com
+      ssltargetoverrideurlsubstitutionexp: peer0.org4.example.com
+      mappedhost: peer0.org4.example.com
   orderer:
     - pattern: (\w*)orderer.example.com(\w*)
       urlsubstitutionexp: grpcs://192.168.1.81:7050

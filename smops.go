@@ -88,9 +88,10 @@ func sm3Ops() {
 
 func sm4Ops() {
 	// handle at client side (in app server)
-	key := []byte("1234567890abcdef") // SM4 key size must be 16
+	key := []byte("1234567890abcdef") // SM4 key size must be 16 bytes (128 bit)
+	iv := []byte("0000000000000000")  // SM4 iv size must be 16 bytes (128 bit)
 	msg := []byte("123456")
-	msgEncrypted, err := sm4Encrypt(key, msg)
+	msgEncrypted, err := sm4Encrypt(key, iv, msg)
 	if err != nil {
 		log.Fatalf("SM4 encrypt error:%v\n", err)
 	}
@@ -103,31 +104,31 @@ func sm4Ops() {
 	// send back "msgEncrypted" from remote side...
 
 	// handle at client side (in app server)
-	msgDecrypted, err := sm4Decrypt(key, msgEncrypted)
+	msgDecrypted, err := sm4Decrypt(key, iv, msgEncrypted)
 	if err != nil {
 		log.Fatalf("SM4 decrypt error:%v\n", err)
 	}
 	fmt.Printf("msgDecrypted:%s\n", msgDecrypted)
 }
 
-func sm4Encrypt(key, msg []byte) ([]byte, error) {
-	if key == nil || msg == nil || len(key) == 0 || len(msg) == 0 {
+func sm4Encrypt(key, iv, msg []byte) ([]byte, error) {
+	if key == nil || iv == nil || msg == nil || len(key) != 16 || len(iv) != 16 || len(msg) == 0 {
 		return nil, errors.New("some args are nil or empty")
 	}
-	// encrypt, mode = true
-	msgEncrypted, err := sm4.Sm4Cbc(key, msg, true)
+	// encrypt
+	msgEncrypted, err := sm4.Sm4Encrypt(key, iv, msg)
 	if err != nil {
 		return nil, err
 	}
 	return msgEncrypted, nil
 }
 
-func sm4Decrypt(key, text []byte) ([]byte, error) {
-	if key == nil || text == nil || len(key) == 0 || len(text) == 0 {
+func sm4Decrypt(key, iv, text []byte) ([]byte, error) {
+	if key == nil || iv == nil || text == nil || len(key) != 16 || len(iv) != 16 || len(text) == 0 {
 		return nil, errors.New("some args are nil or empty")
 	}
-	// decrypt, mode = false
-	msgDecrypted, err := sm4.Sm4Cbc(key, text, false)
+	// decrypt
+	msgDecrypted, err := sm4.Sm4Decrypt(key, iv, text)
 	if err != nil {
 		return nil, err
 	}

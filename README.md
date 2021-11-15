@@ -11,7 +11,7 @@ cryptography tools:
 * SM2: key generation, encrypt/decrypt, sign/verify (like RSA)
 * SM3: calculate digest of a message (like SHA256)
 * SM4: key generation, encrypt/decrypt (like AES)
-* Paillier: key generation, addCiphertext/subCiphertext, addPlaintext/MulPlaintext/DivPlaintext
+* Paillier: key generation, AddCiphertext/SubCiphertext, AddPlaintext/MulPlaintext/DivPlaintext
 
 ## config
 

@@ -329,9 +329,9 @@ func paillierCiphertext2(cli *client.Client) {
 	eX = num.NewInt(publicKey, x)
 	eY = num.NewInt(publicKey, y)
 	// add using original operands
-	sum := new(num.Int).Add(eX, eY).Decrypt(privateKey)
+	sum := new(num.Int).AddCiphertext(eX, eY).Decrypt(privateKey)
 	fmt.Printf("add ciphertext:%v\n", sum)
-	diff := new(num.Int).Sub(eX, eY).Decrypt(privateKey)
+	diff := new(num.Int).SubCiphertext(eX, eY).Decrypt(privateKey)
 	fmt.Printf("sub ciphertext:%v\n", diff)
 
 	// Paillier Int to Hex String (serialize)
@@ -356,7 +356,7 @@ func paillierCiphertext2(cli *client.Client) {
 		log.Fatalf("Hex string to key (*num.Int) error:%v\n", err)
 	}
 	// add using new operands
-	sum2 := new(num.Int).Add(eXNum, eYNum).Decrypt(privateKey)
+	sum2 := new(num.Int).AddCiphertext(eXNum, eYNum).Decrypt(privateKey)
 
 	// invoke chaincode to set state
 	// send "key, xHex" to remote side...

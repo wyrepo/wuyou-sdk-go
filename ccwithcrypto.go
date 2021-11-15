@@ -212,11 +212,11 @@ func (s *SimpleStorageChainCode) paillierCiphertext(stub shim.ChaincodeStubInter
 		return shim.Error(fmt.Sprintf("X Hex string to paillier number error:%v", err))
 	}
 	// add ciphertext
-	sum := new(num.Int).Add(x, y)
+	sum := new(num.Int).AddCiphertext(x, y)
 	sumHex, _ := paillierutil.IntToHexStr(sum)
 	logger.Printf("Paillier AddCiphertext sum:%s\n", sumHex)
 	// sub ciphertext
-	diff := new(num.Int).Sub(x, y)
+	diff := new(num.Int).SubCiphertext(x, y)
 	diffHex, _ := paillierutil.IntToHexStr(diff)
 	logger.Printf("Paillier SubCiphertext diff:%s\n", diffHex)
 	// just put "sum", ignoring "diff"

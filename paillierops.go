@@ -34,7 +34,7 @@ func keyConverting() {
 	y := big.NewInt(20)
 	eX = num.NewInt(publicKey, x)
 	eY = num.NewInt(publicKey, y)
-	sum := new(num.Int).Add(eX, eY).Decrypt(privateKey)
+	sum := new(num.Int).AddCiphertext(eX, eY).Decrypt(privateKey)
 
 	// Paillier Int to Hex String (serialize)
 	eXStr, err := util.IntToHexStr(eX)
@@ -59,7 +59,7 @@ func keyConverting() {
 	}
 
 	// add using new operands
-	sum2 := new(num.Int).Add(eXNum, eYNum).Decrypt(privateKey)
+	sum2 := new(num.Int).AddCiphertext(eXNum, eYNum).Decrypt(privateKey)
 	fmt.Printf("sum:%v, sum2:%v\n", sum, sum2)
 }
 
@@ -150,13 +150,13 @@ func paillierOps() {
 	// add ciphertext
 	eX = num.NewInt(publicKey, x)
 	eY = num.NewInt(publicKey, y)
-	sum := new(num.Int).Add(eX, eY).Decrypt(privateKey)
+	sum := new(num.Int).AddCiphertext(eX, eY).Decrypt(privateKey)
 	fmt.Printf("add ciphertext:%v\n", sum)
 
 	// sub ciphertext
 	eX = num.NewInt(publicKey, x)
 	eY = num.NewInt(publicKey, y)
-	diff := new(num.Int).Sub(eX, eY).Decrypt(privateKey)
+	diff := new(num.Int).SubCiphertext(eX, eY).Decrypt(privateKey)
 	fmt.Printf("sub ciphertext:%v\n", diff)
 
 	// add plaintext

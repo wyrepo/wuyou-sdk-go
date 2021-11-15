@@ -44,7 +44,7 @@ func (s *SimpleStorageChainCode) Invoke(stub shim.ChaincodeStubInterface) peer.R
 	case "paillierPlaintext":
 		return s.paillierPlaintext(stub, args)
 	default:
-		return shim.Error("Invalid function name, support 'get', 'put', 'set', 'history'")
+		return shim.Error("Invalid function name, support 'get', 'put', 'set', 'history', 'verify', 'digest', 'paillierCiphertext', 'paillierPlaintext'")
 	}
 }
 

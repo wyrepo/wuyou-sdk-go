@@ -130,7 +130,7 @@ func (s *SimpleStorageChainCode) history(stub shim.ChaincodeStubInterface, args 
 
 func (s *SimpleStorageChainCode) verify(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 3 {
-		return shim.Error("Invalid argument, require <key>")
+		return shim.Error("Invalid argument, require <key> <msg> and <pkHex>")
 	}
 	key := args[0]
 	msg := []byte(args[1])
@@ -182,7 +182,7 @@ func (s *SimpleStorageChainCode) digest(stub shim.ChaincodeStubInterface, args [
 
 func (s *SimpleStorageChainCode) paillierCiphertext(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 3 {
-		return shim.Error("Invalid argument, require <key> and <value>")
+		return shim.Error("Invalid argument, require <key> <pkHex> and <yHex>")
 	}
 	key := args[0]
 	xHexBytes, err := stub.GetState(key)
@@ -231,7 +231,7 @@ func (s *SimpleStorageChainCode) paillierCiphertext(stub shim.ChaincodeStubInter
 
 func (s *SimpleStorageChainCode) paillierPlaintext(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 3 {
-		return shim.Error("Invalid argument, require <key> and <value>")
+		return shim.Error("Invalid argument, require <key> <pkHex> and <yDec>")
 	}
 	key := args[0]
 	xHexBytes, err := stub.GetState(key)
@@ -272,7 +272,7 @@ func (s *SimpleStorageChainCode) paillierPlaintext(stub shim.ChaincodeStubInterf
 	quotient := new(num.Int).DivPlaintext(x, y) // must be "x mod y == 0", avoid overflowing
 	quotientHex, _ := paillierutil.IntToHexStr(quotient)
 	logger.Printf("Paillier DivPlaintext quotient:%s\n", quotientHex)
-	// just put "sum", ignoring "diff"
+	// just put "sum", ignoring "product"/"quotient"
 	err = stub.PutState(key, []byte(sumHex))
 	if err != nil {
 		logger.Printf("Put key %s failed: %s\n", key, err)

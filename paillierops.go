@@ -145,32 +145,47 @@ func paillierOps() {
 		log.Fatalf("New key pair error:%v\n", err)
 	}
 	var eX, eY *num.Int
-	x, y := big.NewInt(100), big.NewInt(-23)
+	operands := [][]int64{
+		{100, -23}, // DivPlainText will overflow (must be "x mod y == 0")
+		{100, -20}, {-100, 20}, {100, 20}, {-100, -20},
+		{0, 20}, {0, -20},
+		{100, 0}, // DivPlainText will check operand "0"
+	}
+	for _, operand := range operands {
+		operandX := operand[0]
+		operandY := operand[1]
+		fmt.Printf("x:%v y:%v\n", operandX, operandY)
 
-	// add ciphertext
-	eX = num.NewInt(publicKey, x)
-	eY = num.NewInt(publicKey, y)
-	sum := new(num.Int).AddCiphertext(eX, eY).Decrypt(privateKey)
-	fmt.Printf("add ciphertext:%v\n", sum)
+		x := big.NewInt(operandX)
+		y := big.NewInt(operandY)
 
-	// sub ciphertext
-	eX = num.NewInt(publicKey, x)
-	eY = num.NewInt(publicKey, y)
-	diff := new(num.Int).SubCiphertext(eX, eY).Decrypt(privateKey)
-	fmt.Printf("sub ciphertext:%v\n", diff)
+		// add ciphertext
+		eX = num.NewInt(publicKey, x)
+		eY = num.NewInt(publicKey, y)
+		sum := new(num.Int).AddCiphertext(eX, eY).Decrypt(privateKey)
+		fmt.Printf("add ciphertext:%v\n", sum)
 
-	// add plaintext
-	eX = num.NewInt(publicKey, x)
-	sum = new(num.Int).AddPlaintext(eX, y).Decrypt(privateKey)
-	fmt.Printf("add plaintext:%v\n", sum)
+		// sub ciphertext
+		eX = num.NewInt(publicKey, x)
+		eY = num.NewInt(publicKey, y)
+		diff := new(num.Int).SubCiphertext(eX, eY).Decrypt(privateKey)
+		fmt.Printf("sub ciphertext:%v\n", diff)
 
-	// mul plaintext
-	eX = num.NewInt(publicKey, x)
-	prod := new(num.Int).MulPlaintext(eX, y).Decrypt(privateKey)
-	fmt.Printf("mul plaintext:%v\n", prod)
+		// add plaintext
+		eX = num.NewInt(publicKey, x)
+		sum = new(num.Int).AddPlaintext(eX, y).Decrypt(privateKey)
+		fmt.Printf("add plaintext:%v\n", sum)
 
-	// div plaintext
-	eX = num.NewInt(publicKey, x)
-	quotient := new(num.Int).DivPlaintext(eX, y).Decrypt(privateKey) // must be "x mod y == 0", avoid overflowing
-	fmt.Printf("div plaintext:%v\n", quotient)
+		// mul plaintext
+		eX = num.NewInt(publicKey, x)
+		prod := new(num.Int).MulPlaintext(eX, y).Decrypt(privateKey)
+		fmt.Printf("mul plaintext:%v\n", prod)
+
+		// div plaintext
+		eX = num.NewInt(publicKey, x)
+		quotient := new(num.Int).DivPlaintext(eX, y).Decrypt(privateKey) // must be "x mod y == 0", avoid overflowing
+		fmt.Printf("div plaintext:%v\n", quotient)
+		fmt.Println("-----------------------------")
+	}
+
 }
